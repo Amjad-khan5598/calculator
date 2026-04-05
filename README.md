@@ -31,10 +31,10 @@ A responsive web-based calculator built using **HTML, CSS, and JavaScript**. It 
 * `style.css` → Design and layout
 * `script.js` → Calculator logic
 
-## 🌐 Live Demo
+## Live Demo
 
 
 
-## 📌 Author
+## Author
 
 Mohammad Amjad Khan
