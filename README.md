@@ -33,7 +33,7 @@ A responsive web-based calculator built using **HTML, CSS, and JavaScript**. It 
 
 ## Live Demo
 
-
+https://amjad-khan5598.github.io/calculator/
 
 ## Author
 
