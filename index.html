@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculator</title>
+    <!-- Google Fonts - Nunito to make the calculator look modern -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+          font-family: 'Nunito', sans-serif;
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(135deg, #1a0533 0%, #2d1060 50%, #1a0533 100%);
+        }
+
+        .calculator {
+          background: linear-gradient(160deg, #6a0dad 0%, #4a0080 60%, #3a006a 100%);
+          border-radius: 28px;
+          padding: 28px 24px 24px;
+          width: 320px;
+          border: 1.5px solid rgba(180, 100, 255, 0.35);
+          box-shadow:
+            0 0 0 1px rgba(120, 40, 200, 0.2),
+            0 25px 60px rgba(80, 0, 160, 0.6),
+            inset 0 1px 0 rgba(255,255,255,0.12);
+        }
+
+        .display {
+          background: rgba(10, 0, 30, 0.55);
+          border-radius: 16px;
+          padding: 18px 20px 14px;
+          margin-bottom: 22px;
+          border: 1px solid rgba(180, 100, 255, 0.2);
+          min-height: 88px;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          align-items: flex-end;
+        }
+        /* class selector .expr is for the expression(answer) display */
+        .expr {
+          font-size: 13px;
+          color: rgba(200, 160, 255, 0.55);
+          min-height: 18px;
+          word-break: break-all;
+          text-align: right;
+        }
+
+        #display {
+          font-size: 38px;
+          font-weight: 800;
+          color: #f0e0ff;
+          word-break: break-all;
+          text-align: right;
+          margin-top: 2px;
+          letter-spacing: -1px;
+        }
+        /* .grid is the container for all the buttons, using CSS Grid to layout in 4 columns and 5 rows  and 1 fr means 1 fraction of the available space */
+        .grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 11px;
+        }
+
+        button {
+          height: 62px;
+          font-family: 'Nunito', sans-serif;
+          font-size: 18px;
+          font-weight: 700;
+          border: none;
+          border-radius: 14px;
+          cursor: pointer;
+          transition: transform 0.07s ease, filter 0.07s ease;
+        }
+        /*":" this introduces a pseudo-class, a pseudo-class is a special state of element*/ 
+        /* “When the user clicks the button, make it shrink slightly to look pressed. :active is for applying the style when the button is clicked it is automatically applied ”*/
+        button:active { transform: scale(0.91); }
+
+        .btn {
+          background: rgba(255, 255, 255, 0.1);
+          color: #ede0ff;
+          border: 1px solid rgba(200, 150, 255, 0.15);
+        }
+        .btn:hover { background: rgba(255, 255, 255, 0.17); }
+
+        .operator {
+          background: rgba(200, 100, 255, 0.3);
+          color: #e8b8ff;
+          border: 1px solid rgba(200, 100, 255, 0.35);
+        }
+        /*When the mouse is hovering over the button  it will have a different background color */
+        .operator:hover { background: rgba(200, 100, 255, 0.45); }
+
+        .clear {
+          background: rgba(220, 60, 120, 0.35);
+          color: #ffb3d1;
+          border: 1px solid rgba(220, 60, 120, 0.35);
+        }
+        .clear:hover { background: rgba(220, 60, 120, 0.5); }
+
+        .equal {
+          grid-column: span 4;
+          height: 58px;
+          border-radius: 14px;
+          background: linear-gradient(135deg, #c850ff 0%, #8a00e6 100%);
+          color: #fff;
+          font-size: 22px;
+          font-weight: 800;
+          border: none;
+          letter-spacing: 1px;
+        }
+        .equal:hover { filter: brightness(1.12); }
+
+        /* highlight button on keyboard press */
+        button.active {
+          transform: scale(0.91);
+          filter: brightness(1.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="calculator">
+    <div class="display">
+        <div class="expr" id="expr"></div>
+        <div id="display">0</div>
+    </div>
+  <!-- Each button has an onclick event that calls a JavaScript function to handle the input. The p() function is for numbers and operators, c() is for clear, pct() is for percentage, and eq() is for equals. The buttons are arranged in a grid layout with classes for styling. --> 
+    <div class="grid">
+        <button class="btn" id="k7" onclick="p('7')">7</button>
+        <button class="btn" id="k8" onclick="p('8')">8</button>
+        <button class="btn" id="k9" onclick="p('9')">9</button>
+        <button class="operator" id="kdiv" onclick="p('/')">÷</button>
+
+        <button class="btn" id="k4" onclick="p('4')">4</button>
+        <button class="btn" id="k5" onclick="p('5')">5</button>
+        <button class="btn" id="k6" onclick="p('6')">6</button>
+        <button class="operator" id="kmul" onclick="p('*')">×</button>
+
+        <button class="btn" id="k1" onclick="p('1')">1</button>
+        <button class="btn" id="k2" onclick="p('2')">2</button>
+        <button class="btn" id="k3" onclick="p('3')">3</button>
+        <button class="operator" id="ksub" onclick="p('-')">−</button>
+
+        <button class="btn" id="k0" onclick="p('0')">0</button>
+        <button class="clear" id="kc" onclick="c()">C</button>
+        <button class="operator" id="kadd" onclick="p('+')">+</button>
+        <button class="operator" id="kpct" onclick="pct()">%</button>
+
+        <button class="equal" id="keq" onclick="eq()">=</button>
+    </div>
+</div>
+
+<script>
+    // 'e' stores the current expression (e.g., "2+3")
+    // 'fresh' tells if the last action was showing a result
+    let e = '', fresh = false;
+
+    // Shortcut function to get the main display element
+    const D = () => document.getElementById('display');
+
+    // Shortcut function to get the expression display (top small text)
+    const X = () => document.getElementById('expr');
+
+    // Function to handle button input (numbers & operators)
+    function p(v) {
+
+      // If result was just shown and user presses a number,
+      // start a new calculation
+      if (fresh && !isNaN(v)) { 
+        e = ''; 
+        fresh = false; 
+      }
+
+      // Reset fresh flag
+      fresh = false;
+
+      // Add the pressed value to the expression
+      e += v;
+
+      // Update main display (replace * and / with × and ÷ for UI)
+      D().textContent = e.replace(/\*/g,'×').replace(/\//g,'÷');
+
+      // Clear the expression display (top line)
+      X().textContent = '';
+    }
+
+    // Function to clear everything (reset calculator)
+    function c() { 
+      e = '';                 // clear expression
+      fresh = false;          // reset flag
+      D().textContent = '0';  // reset main display
+      X().textContent = '';   // clear expression display
+    }
+
+    // Function to calculate percentage
+    function pct() {
+      if (!e) return;  // do nothing if expression is empty
+
+      // Evaluate expression and divide by 100
+      let r = eval(e) / 100;
+
+      // Show original expression with % symbol
+      X().textContent = e + ' %';
+
+      // Store result as new expression
+      e = String(r);
+
+      // Show result on display
+      D().textContent = r;
+
+      // Mark result as fresh
+      fresh = true;
+    }
+
+    // Function to evaluate the expression (= button)
+    function eq() {
+      if (!e) return;  // do nothing if empty
+
+      try {
+        // Evaluate the mathematical expression
+        let r = eval(e);
+
+        // Show full expression with = sign
+        X().textContent = e.replace(/\*/g,'×').replace(/\//g,'÷') + ' =';
+
+        // If result is a long decimal, round it to 10 decimal places
+        if (r % 1 !== 0) r = parseFloat(r.toFixed(10));
+
+        // Display result
+        D().textContent = r;
+
+        // Store result for further calculations
+        e = String(r);
+
+        // Mark as fresh result
+        fresh = true;
+
+      } catch { 
+        // If error occurs (invalid input), show error and reset
+        D().textContent = 'Error'; 
+        e = ''; 
+      }
+    }
+
+    // keyboard map: key -> button id + action
+    const keyMap = {
+      '0':'k0','1':'k1','2':'k2','3':'k3','4':'k4',
+      '5':'k5','6':'k6','7':'k7','8':'k8','9':'k9',
+      '+':'kadd','-':'ksub','*':'kmul','/':'kdiv',
+      '%':'kpct','Enter':'keq','Escape':'kc'
+    };
+
+    document.addEventListener('keydown', function(ev) {
+      const k = ev.key;
+      if (k === 'Backspace') {
+        e = e.slice(0, -1);
+        D().textContent = e ? e.replace(/\*/g,'×').replace(/\//g,'÷') : '0';
+        return;
+      }
+      const id = keyMap[k];
+      if (!id) return;
+      ev.preventDefault();
+      document.getElementById(id).classList.add('active');
+      if (k >= '0' && k <= '9') p(k);
+      else if (['+','-','*','/'].includes(k)) p(k);
+      else if (k === '%') pct();
+      else if (k === 'Enter') eq();
+      else if (k === 'Escape') c();
+    });
+
+    document.addEventListener('keyup', function(ev) {
+      const id = keyMap[ev.key];
+      if (id) document.getElementById(id).classList.remove('active');
+    });
+</script>
+
+</body>
+</html>
